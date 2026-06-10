@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="ad48625efcb844d7bcdfaa0e1a1354a4" Name="Diagram1">
+        <EntityTypeShape EntityType="KaraokeQLModel.CHITIETDATPHONG" Width="1.5" PointX="7.5" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="KaraokeQLModel.DATPHONG" Width="1.5" PointX="5.25" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="KaraokeQLModel.KHACHHANG" Width="1.5" PointX="3" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="KaraokeQLModel.LOAIPHONG" Width="1.5" PointX="0.75" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="KaraokeQLModel.PHONG" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="KaraokeQLModel.PHUTHU" Width="1.5" PointX="5.25" PointY="5.375" IsExpanded="true" />
+        <AssociationConnector Association="KaraokeQLModel.FK__CHITIETDAT__MaDP__300424B4" ManuallyRouted="false" />
+        <AssociationConnector Association="KaraokeQLModel.FK__CHITIETDAT__MaPT__30F848ED" ManuallyRouted="false" />
+        <AssociationConnector Association="KaraokeQLModel.FK__DATPHONG__MaKH__2B3F6F97" ManuallyRouted="false" />
+        <AssociationConnector Association="KaraokeQLModel.FK__DATPHONG__MaPh__2A4B4B5E" ManuallyRouted="false" />
+        <AssociationConnector Association="KaraokeQLModel.FK__PHONG__MaNhom__25869641" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

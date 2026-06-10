@@ -1,0 +1,161 @@
+﻿<Window x:Class="DoQuangHuy_2001215807_KT2.Views.frmDatPhong"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:DoQuangHuy_2001215807_KT2.ViewModels"
+        Title="Tạo Phiếu Đặt Phòng Karaoke" Height="520" Width="800"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.DataContext>
+        <vm:DatPhongViewModel/>
+    </Window.DataContext>
+
+    <Grid Margin="12">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="270"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- ===== TRÁI: Thông tin đặt phòng ===== -->
+        <GroupBox Header="Thông tin đặt phòng" Grid.Column="0" Margin="0,0,8,0" Padding="8">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="110"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="34"/>
+                    <RowDefinition Height="34"/>
+                    <RowDefinition Height="34"/>
+                    <RowDefinition Height="34"/>
+                    <RowDefinition Height="34"/>
+                    <RowDefinition Height="34"/>
+                    <RowDefinition Height="34"/>
+                </Grid.RowDefinitions>
+
+                <!-- Ngày đặt -->
+                <Label Grid.Row="0" Grid.Column="0" Content="Ngày đặt phòng:" VerticalAlignment="Center"/>
+                <DatePicker Grid.Row="0" Grid.Column="1" Margin="0,4"
+                            SelectedDate="{Binding NgayDat}"/>
+
+                <!-- Chọn phòng -->
+                <Label Grid.Row="1" Grid.Column="0" Content="Chọn phòng:" VerticalAlignment="Center"/>
+                <ComboBox Grid.Row="1" Grid.Column="1" Margin="0,4"
+                          ItemsSource="{Binding DanhSachPhong}"
+                          SelectedItem="{Binding SelectedPhong}"
+                          DisplayMemberPath="TenPhong"/>
+
+                <!-- Giá phòng readonly -->
+                <Label Grid.Row="2" Grid.Column="0" Content="Giá phòng:" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="2" Grid.Column="1" Margin="0,4" IsReadOnly="True"
+                         Text="{Binding GiaPhong, StringFormat=N0}" Background="#FFF9C4"/>
+
+                <!-- Sức chứa readonly -->
+                <Label Grid.Row="3" Grid.Column="0" Content="Sức chứa:" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="3" Grid.Column="1" Margin="0,4" IsReadOnly="True"
+                         Text="{Binding SucChua, StringFormat='{}{0} người'}" Background="#FFF9C4"/>
+
+                <!-- Chọn khách hàng -->
+                <Label Grid.Row="4" Grid.Column="0" Content="Chọn khách hàng:" VerticalAlignment="Center"/>
+                <ComboBox Grid.Row="4" Grid.Column="1" Margin="0,4"
+                          ItemsSource="{Binding DanhSachKhach}"
+                          SelectedItem="{Binding SelectedKhach}"
+                          DisplayMemberPath="TenKH"/>
+
+                <!-- Giờ vào -->
+                <Label Grid.Row="5" Grid.Column="0" Content="Giờ vào:" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="5" Grid.Column="1" Margin="0,4"
+                         Text="{Binding GioVao, UpdateSourceTrigger=PropertyChanged}"
+                         ToolTip="Định dạng HH:mm (vd: 13:00)"/>
+
+                <!-- Giờ ra -->
+                <Label Grid.Row="6" Grid.Column="0" Content="Giờ ra:" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="6" Grid.Column="1" Margin="0,4"
+                         Text="{Binding GioRa, UpdateSourceTrigger=PropertyChanged}"
+                         ToolTip="Định dạng HH:mm (vd: 15:00)"/>
+            </Grid>
+        </GroupBox>
+
+        <!-- ===== PHẢI: Phụ thu ===== -->
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="40"/>
+            </Grid.RowDefinitions>
+
+            <!-- Input phụ thu -->
+            <GroupBox Header="Thông tin phụ thu" Grid.Row="0" Padding="8,4">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="90"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Row="0" Grid.Column="0" Content="Chọn phụ thu:"/>
+                    <Label Grid.Row="0" Grid.Column="1" Content="Số lượng:"/>
+
+                    <ComboBox Grid.Row="1" Grid.Column="0" Height="26" Margin="0,0,6,0"
+                              ItemsSource="{Binding DanhSachPhuThu}"
+                              SelectedItem="{Binding SelectedPhuThu}"
+                              DisplayMemberPath="TenPhuThu"/>
+
+                    <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,0,6,0">
+                        <TextBlock Text="{Binding GiaPTHienThi, StringFormat='Giá: {0:N0}'}"
+                                   FontSize="10" Foreground="Gray"/>
+                        <TextBox Text="{Binding SoLuongPT, UpdateSourceTrigger=PropertyChanged}"
+                                 Height="26"/>
+                    </StackPanel>
+
+                    <Button Grid.Row="1" Grid.Column="2" Content="Thêm"
+                            Command="{Binding ThemPTCommand}"
+                            Width="60" Height="26"
+                            Background="#4CAF50" Foreground="White"/>
+                </Grid>
+            </GroupBox>
+
+            <!-- Danh sách phụ thu đã thêm -->
+            <GroupBox Header="Danh sách phụ thu" Grid.Row="1" Margin="0,4">
+                <DataGrid ItemsSource="{Binding DanhSachChiTiet}"
+                          AutoGenerateColumns="False"
+                          IsReadOnly="True"
+                          CanUserAddRows="False"
+                          GridLinesVisibility="All"
+                          AlternatingRowBackground="#F5F5F5"
+                          Margin="4">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Mã PT"       Binding="{Binding MaPT}"                       Width="60"/>
+                        <DataGridTextColumn Header="Tên phụ thu" Binding="{Binding TenPhuThu}"                  Width="*"/>
+                        <DataGridTextColumn Header="Giá phụ thu" Binding="{Binding GiaPT, StringFormat=N0}"     Width="90"/>
+                        <DataGridTextColumn Header="Số lượng"    Binding="{Binding SoLuong}"                    Width="70"/>
+                        <DataGridTextColumn Header="Thành tiền"  Binding="{Binding ThanhTien, StringFormat=N0}" Width="90"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </GroupBox>
+
+            <!-- Footer: Tổng tiền + nút Đặt phòng -->
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="130"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Column="0" Content="Tổng tiền tạm tính:"
+                       HorizontalAlignment="Right" VerticalAlignment="Center" FontWeight="Bold"/>
+                <TextBox Grid.Column="1" Width="130" Height="30" IsReadOnly="True"
+                         Text="{Binding TongTien, StringFormat=N0}"
+                         Background="#FFF9C4" FontWeight="Bold" FontSize="13"
+                         VerticalContentAlignment="Center" Margin="4,0"/>
+                <Button Grid.Column="2" Content="Đặt phòng"
+                        Command="{Binding DatPhongCommand}"
+                        Height="32" Background="#1565C0" Foreground="White"
+                        FontWeight="Bold" FontSize="13"/>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

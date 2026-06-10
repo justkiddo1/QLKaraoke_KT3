@@ -1,0 +1,81 @@
+﻿<Window x:Class="DoQuangHuy_2001215807_KT2.Views.frmTimKiem"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:DoQuangHuy_2001215807_KT2.ViewModels"
+        Title="frmTimKiem" Height="380" Width="660"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.DataContext>
+        <vm:TimKiemViewModel/>
+    </Window.DataContext>
+
+    <Grid Margin="12">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="160"/>
+            <ColumnDefinition Width="180"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- CỘT 1: Bộ lọc -->
+        <StackPanel Grid.Column="0" Margin="0,0,8,0">
+            <Label Content="Chọn tầng:" FontWeight="SemiBold"/>
+            <ComboBox ItemsSource="{Binding DanhSachTang}"
+                      SelectedItem="{Binding SelectedTang}"
+                      DisplayMemberPath="TenNhom"
+                      Height="26" Margin="0,2,0,10"/>
+
+            <Label Content="Sức chứa (≥):" FontWeight="SemiBold"/>
+            <TextBox Text="{Binding SucChua, UpdateSourceTrigger=PropertyChanged}"
+                     Height="26" Margin="0,2,0,12"/>
+
+            <Button Content="Tìm kiếm"
+                    Command="{Binding TimKiemCommand}"
+                    Height="30" Background="#2196F3" Foreground="White" FontWeight="Bold"/>
+        </StackPanel>
+
+        <!-- CỘT 2: ListBox kết quả -->
+        <GroupBox Header="Thông tin phòng" Grid.Column="1" Margin="0,0,8,0">
+            <ListBox ItemsSource="{Binding KetQua}"
+                     SelectedItem="{Binding SelectedPhong}"
+                     DisplayMemberPath="TenPhong"
+                     Margin="4"/>
+        </GroupBox>
+
+        <!-- CỘT 3: Chi tiết -->
+        <GroupBox Header="Thông tin chi tiết" Grid.Column="2">
+            <Grid Margin="8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="85"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="34"/>
+                    <RowDefinition Height="34"/>
+                    <RowDefinition Height="34"/>
+                    <RowDefinition Height="34"/>
+                    <RowDefinition Height="34"/>
+                </Grid.RowDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="0" Content="Tên phòng:"  VerticalAlignment="Center"/>
+                <TextBox Grid.Row="0" Grid.Column="1" IsReadOnly="True" Margin="0,4"
+                         Text="{Binding TenPhong}" Background="#FFF9C4"/>
+
+                <Label Grid.Row="1" Grid.Column="0" Content="Sức chứa:"  VerticalAlignment="Center"/>
+                <TextBox Grid.Row="1" Grid.Column="1" IsReadOnly="True" Margin="0,4"
+                         Text="{Binding SucChuaText}" Background="#FFF9C4"/>
+
+                <Label Grid.Row="2" Grid.Column="0" Content="Giá:"       VerticalAlignment="Center"/>
+                <TextBox Grid.Row="2" Grid.Column="1" IsReadOnly="True" Margin="0,4"
+                         Text="{Binding GiaText}" Background="#FFF9C4"/>
+
+                <Label Grid.Row="3" Grid.Column="0" Content="Kiểu phòng:" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="3" Grid.Column="1" IsReadOnly="True" Margin="0,4"
+                         Text="{Binding KieuPhongText}" Background="#C8E6C9"/>
+
+                <Label Grid.Row="4" Grid.Column="0" Content="Tình trạng:" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="4" Grid.Column="1" IsReadOnly="True" Margin="0,4"
+                         Text="{Binding TinhTrang}" Background="#FFCDD2"/>
+            </Grid>
+        </GroupBox>
+    </Grid>
+</Window>

@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="KaraokeQLModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="CHITIETDATPHONG">
+    <Key>
+      <PropertyRef Name="MaCT" />
+    </Key>
+    <Property Name="MaCT" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MaDP" Type="Int32" />
+    <Property Name="MaPT" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="SL" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="DATPHONG" Relationship="Self.FK__CHITIETDAT__MaDP__300424B4" FromRole="CHITIETDATPHONG" ToRole="DATPHONG" />
+    <NavigationProperty Name="PHUTHU" Relationship="Self.FK__CHITIETDAT__MaPT__30F848ED" FromRole="CHITIETDATPHONG" ToRole="PHUTHU" />
+  </EntityType>
+  <EntityType Name="DATPHONG">
+    <Key>
+      <PropertyRef Name="MaDatPhong" />
+    </Key>
+    <Property Name="MaDatPhong" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MaPh" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="MaKH" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="NgayDat" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="NgayTra" Type="DateTime" Precision="0" />
+    <NavigationProperty Name="CHITIETDATPHONGs" Relationship="Self.FK__CHITIETDAT__MaDP__300424B4" FromRole="DATPHONG" ToRole="CHITIETDATPHONG" />
+    <NavigationProperty Name="KHACHHANG" Relationship="Self.FK__DATPHONG__MaKH__2B3F6F97" FromRole="DATPHONG" ToRole="KHACHHANG" />
+    <NavigationProperty Name="PHONG" Relationship="Self.FK__DATPHONG__MaPh__2A4B4B5E" FromRole="DATPHONG" ToRole="PHONG" />
+  </EntityType>
+  <EntityType Name="KHACHHANG">
+    <Key>
+      <PropertyRef Name="MaKhachHang" />
+    </Key>
+    <Property Name="MaKhachHang" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="TenKH" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="SoDT" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="DATPHONGs" Relationship="Self.FK__DATPHONG__MaKH__2B3F6F97" FromRole="KHACHHANG" ToRole="DATPHONG" />
+  </EntityType>
+  <EntityType Name="LOAIPHONG">
+    <Key>
+      <PropertyRef Name="MaNhom" />
+    </Key>
+    <Property Name="MaNhom" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="TenNhom" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="PHONGs" Relationship="Self.FK__PHONG__MaNhom__25869641" FromRole="LOAIPHONG" ToRole="PHONG" />
+  </EntityType>
+  <EntityType Name="PHONG">
+    <Key>
+      <PropertyRef Name="MaPhong" />
+    </Key>
+    <Property Name="MaPhong" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="TenPhong" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="SucChua" Type="Int32" Nullable="false" />
+    <Property Name="GiaPhong" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+    <Property Name="KieuPhong" Type="Int32" Nullable="false" />
+    <Property Name="MaNhom" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="DATPHONGs" Relationship="Self.FK__DATPHONG__MaPh__2A4B4B5E" FromRole="PHONG" ToRole="DATPHONG" />
+    <NavigationProperty Name="LOAIPHONG" Relationship="Self.FK__PHONG__MaNhom__25869641" FromRole="PHONG" ToRole="LOAIPHONG" />
+  </EntityType>
+  <EntityType Name="PHUTHU">
+    <Key>
+      <PropertyRef Name="MaPhuThu" />
+    </Key>
+    <Property Name="MaPhuThu" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="TenPhuThu" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="GiaPT" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+    <NavigationProperty Name="CHITIETDATPHONGs" Relationship="Self.FK__CHITIETDAT__MaPT__30F848ED" FromRole="PHUTHU" ToRole="CHITIETDATPHONG" />
+  </EntityType>
+  <Association Name="FK__CHITIETDAT__MaDP__300424B4">
+    <End Role="DATPHONG" Type="Self.DATPHONG" Multiplicity="0..1" />
+    <End Role="CHITIETDATPHONG" Type="Self.CHITIETDATPHONG" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DATPHONG">
+        <PropertyRef Name="MaDatPhong" />
+      </Principal>
+      <Dependent Role="CHITIETDATPHONG">
+        <PropertyRef Name="MaDP" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__CHITIETDAT__MaPT__30F848ED">
+    <End Role="PHUTHU" Type="Self.PHUTHU" Multiplicity="0..1" />
+    <End Role="CHITIETDATPHONG" Type="Self.CHITIETDATPHONG" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PHUTHU">
+        <PropertyRef Name="MaPhuThu" />
+      </Principal>
+      <Dependent Role="CHITIETDATPHONG">
+        <PropertyRef Name="MaPT" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__DATPHONG__MaKH__2B3F6F97">
+    <End Role="KHACHHANG" Type="Self.KHACHHANG" Multiplicity="0..1" />
+    <End Role="DATPHONG" Type="Self.DATPHONG" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="KHACHHANG">
+        <PropertyRef Name="MaKhachHang" />
+      </Principal>
+      <Dependent Role="DATPHONG">
+        <PropertyRef Name="MaKH" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__DATPHONG__MaPh__2A4B4B5E">
+    <End Role="PHONG" Type="Self.PHONG" Multiplicity="0..1" />
+    <End Role="DATPHONG" Type="Self.DATPHONG" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PHONG">
+        <PropertyRef Name="MaPhong" />
+      </Principal>
+      <Dependent Role="DATPHONG">
+        <PropertyRef Name="MaPh" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__PHONG__MaNhom__25869641">
+    <End Role="LOAIPHONG" Type="Self.LOAIPHONG" Multiplicity="0..1" />
+    <End Role="PHONG" Type="Self.PHONG" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="LOAIPHONG">
+        <PropertyRef Name="MaNhom" />
+      </Principal>
+      <Dependent Role="PHONG">
+        <PropertyRef Name="MaNhom" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="KaraokeQLEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="CHITIETDATPHONGs" EntityType="Self.CHITIETDATPHONG" />
+    <EntitySet Name="DATPHONGs" EntityType="Self.DATPHONG" />
+    <EntitySet Name="KHACHHANGs" EntityType="Self.KHACHHANG" />
+    <EntitySet Name="LOAIPHONGs" EntityType="Self.LOAIPHONG" />
+    <EntitySet Name="PHONGs" EntityType="Self.PHONG" />
+    <EntitySet Name="PHUTHUs" EntityType="Self.PHUTHU" />
+    <AssociationSet Name="FK__CHITIETDAT__MaDP__300424B4" Association="Self.FK__CHITIETDAT__MaDP__300424B4">
+      <End Role="DATPHONG" EntitySet="DATPHONGs" />
+      <End Role="CHITIETDATPHONG" EntitySet="CHITIETDATPHONGs" />
+    </AssociationSet>
+    <AssociationSet Name="FK__CHITIETDAT__MaPT__30F848ED" Association="Self.FK__CHITIETDAT__MaPT__30F848ED">
+      <End Role="PHUTHU" EntitySet="PHUTHUs" />
+      <End Role="CHITIETDATPHONG" EntitySet="CHITIETDATPHONGs" />
+    </AssociationSet>
+    <AssociationSet Name="FK__DATPHONG__MaKH__2B3F6F97" Association="Self.FK__DATPHONG__MaKH__2B3F6F97">
+      <End Role="KHACHHANG" EntitySet="KHACHHANGs" />
+      <End Role="DATPHONG" EntitySet="DATPHONGs" />
+    </AssociationSet>
+    <AssociationSet Name="FK__DATPHONG__MaPh__2A4B4B5E" Association="Self.FK__DATPHONG__MaPh__2A4B4B5E">
+      <End Role="PHONG" EntitySet="PHONGs" />
+      <End Role="DATPHONG" EntitySet="DATPHONGs" />
+    </AssociationSet>
+    <AssociationSet Name="FK__PHONG__MaNhom__25869641" Association="Self.FK__PHONG__MaNhom__25869641">
+      <End Role="LOAIPHONG" EntitySet="LOAIPHONGs" />
+      <End Role="PHONG" EntitySet="PHONGs" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
