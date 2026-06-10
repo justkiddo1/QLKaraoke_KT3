@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using DoQuangHuy_2001215807_KT2.Helpers;
@@ -14,6 +12,7 @@ namespace DoQuangHuy_2001215807_KT2.ViewModels
         public string MaPT { get; set; }
         public string TenPhuThu { get; set; }
         public decimal GiaPT { get; set; }
+
         private int _soLuong;
         public int SoLuong
         {
@@ -42,13 +41,14 @@ namespace DoQuangHuy_2001215807_KT2.ViewModels
             {
                 SetProperty(ref _selectedPhong, value);
                 OnPropertyChanged(nameof(GiaPhong));
-                OnPropertyChanged(nameof(SucChua));
+                OnPropertyChanged(nameof(SucChuaText));
                 TinhTong();
             }
         }
 
         public decimal GiaPhong => SelectedPhong?.GiaPhong ?? 0;
-        public int SucChua => SelectedPhong?.SucChua ?? 0;
+
+        public string SucChuaText => SelectedPhong == null ? "" : SelectedPhong.SucChua + " người";
 
         private KHACHHANG _selectedKhach;
         public KHACHHANG SelectedKhach { get => _selectedKhach; set => SetProperty(ref _selectedKhach, value); }
@@ -59,7 +59,6 @@ namespace DoQuangHuy_2001215807_KT2.ViewModels
             get => _selectedPhuThu;
             set { SetProperty(ref _selectedPhuThu, value); OnPropertyChanged(nameof(GiaPTHienThi)); }
         }
-
         public decimal GiaPTHienThi => SelectedPhuThu?.GiaPT ?? 0;
 
         private string _soLuongPT = "1";
@@ -82,14 +81,15 @@ namespace DoQuangHuy_2001215807_KT2.ViewModels
         private decimal _tongTien;
         public decimal TongTien { get => _tongTien; set => SetProperty(ref _tongTien, value); }
 
-
         public ICommand ThemPTCommand { get; }
         public ICommand DatPhongCommand { get; }
+
 
         public DatPhongViewModel()
         {
             ThemPTCommand = new RelayCommand(_ => ExecuteThemPT());
             DatPhongCommand = new RelayCommand(_ => ExecuteDatPhong());
+            LoadData(); 
         }
 
         private void LoadData()
@@ -105,7 +105,8 @@ namespace DoQuangHuy_2001215807_KT2.ViewModels
         private void TinhTong()
         {
             double soGio = 0;
-            if(TimeSpan.TryParse(GioVao, out TimeSpan tv) && TimeSpan.TryParse(GioRa, out TimeSpan tr) )
+            if (TimeSpan.TryParse(GioVao, out TimeSpan tv) &&
+                TimeSpan.TryParse(GioRa, out TimeSpan tr))
             {
                 soGio = (tr - tv).TotalHours;
                 if (soGio < 0) soGio = 0;
@@ -126,7 +127,7 @@ namespace DoQuangHuy_2001215807_KT2.ViewModels
             if (!int.TryParse(SoLuongPT, out int sl) || sl <= 0)
             { MessageBox.Show("Số lượng không hợp lệ!"); return; }
 
-            var existing = null as ChiTietItem;
+            ChiTietItem existing = null;
             foreach (var c in DanhSachChiTiet)
                 if (c.MaPT == SelectedPhuThu.MaPhuThu) { existing = c; break; }
 
@@ -140,6 +141,7 @@ namespace DoQuangHuy_2001215807_KT2.ViewModels
                     GiaPT = SelectedPhuThu.GiaPT,
                     SoLuong = sl
                 });
+
             TinhTong();
             SoLuongPT = "1";
         }
@@ -148,9 +150,9 @@ namespace DoQuangHuy_2001215807_KT2.ViewModels
         {
             if (SelectedPhong == null)
             { MessageBox.Show("Vui lòng chọn phòng!"); return; }
-            if(SelectedKhach == null)
+            if (SelectedKhach == null)
             { MessageBox.Show("Vui lòng chọn khách hàng!"); return; }
-            
+
             using (var db = new KaraokeQLEntities())
             {
                 var dp = new DATPHONG
@@ -163,7 +165,7 @@ namespace DoQuangHuy_2001215807_KT2.ViewModels
                 db.DATPHONGs.Add(dp);
                 db.SaveChanges();
 
-                foreach(var c in DanhSachChiTiet)
+                foreach (var c in DanhSachChiTiet)
                 {
                     db.CHITIETDATPHONGs.Add(new CHITIETDATPHONG
                     {
@@ -172,18 +174,19 @@ namespace DoQuangHuy_2001215807_KT2.ViewModels
                         SL = c.SoLuong
                     });
                 }
-
                 db.SaveChanges();
 
-                MessageBox.Show($"Đặt phòng thành công!\nMã đặt phòng: {dp.MaDatPhong}\nTổng tiền tạm tính: {TongTien:N0} VNĐ", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(
+                    $"Đặt phòng thành công!\nMã đặt phòng: {dp.MaDatPhong}\nTổng tiền tạm tính: {TongTien:N0} VNĐ",
+                    "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
             }
 
             DanhSachChiTiet.Clear();
             SelectedPhong = null;
             SelectedKhach = null;
-            GioVao = "8:00";
+            GioVao = "08:00";
             GioRa = "10:00";
             TongTien = 0;
         }
-    } 
+    }
 }

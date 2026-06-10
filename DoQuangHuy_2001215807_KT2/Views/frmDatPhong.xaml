@@ -44,15 +44,17 @@
                           SelectedItem="{Binding SelectedPhong}"
                           DisplayMemberPath="TenPhong"/>
 
-                <!-- Giá phòng readonly -->
+                <!-- Giá phòng (readonly) -->
                 <Label Grid.Row="2" Grid.Column="0" Content="Giá phòng:" VerticalAlignment="Center"/>
                 <TextBox Grid.Row="2" Grid.Column="1" Margin="0,4" IsReadOnly="True"
-                         Text="{Binding GiaPhong, StringFormat=N0}" Background="#FFF9C4"/>
+                         Text="{Binding GiaPhong, StringFormat=N0}"
+                         Background="#FFF9C4"/>
 
-                <!-- Sức chứa readonly -->
+                <!-- Sức chứa (readonly) — dùng SucChuaText (string) thay vì StringFormat trên int -->
                 <Label Grid.Row="3" Grid.Column="0" Content="Sức chứa:" VerticalAlignment="Center"/>
                 <TextBox Grid.Row="3" Grid.Column="1" Margin="0,4" IsReadOnly="True"
-                         Text="{Binding SucChua, StringFormat='{}{0} người'}" Background="#FFF9C4"/>
+                         Text="{Binding SucChuaText}"
+                         Background="#FFF9C4"/>
 
                 <!-- Chọn khách hàng -->
                 <Label Grid.Row="4" Grid.Column="0" Content="Chọn khách hàng:" VerticalAlignment="Center"/>
@@ -75,7 +77,7 @@
             </Grid>
         </GroupBox>
 
-        <!-- ===== PHẢI: Phụ thu ===== -->
+        <!-- ===== PHẢI: Thông tin phụ thu ===== -->
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -118,7 +120,7 @@
                 </Grid>
             </GroupBox>
 
-            <!-- Danh sách phụ thu đã thêm -->
+            <!-- Danh sách phụ thu -->
             <GroupBox Header="Danh sách phụ thu" Grid.Row="1" Margin="0,4">
                 <DataGrid ItemsSource="{Binding DanhSachChiTiet}"
                           AutoGenerateColumns="False"
@@ -137,7 +139,7 @@
                 </DataGrid>
             </GroupBox>
 
-            <!-- Footer: Tổng tiền + nút Đặt phòng -->
+            <!-- Footer: Tổng tiền + Đặt phòng -->
             <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>

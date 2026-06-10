@@ -1,42 +1,42 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using DoQuangHuy_2001215807_KT2.Helpers;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace DoQuangHuy_2001215807_KT2.ViewModels
 {
     public class PhongViewModel : BaseViewModel
     {
-        private ObservableCollection<PHONG> _danhsachPhong;
+        private ObservableCollection<PHONG> _danhSachPhong;
         public ObservableCollection<PHONG> DanhSachPhong
         {
-            get => _danhsachPhong;
-            set => SetProperty(ref _danhsachPhong, value);
+            get => _danhSachPhong;
+            set => SetProperty(ref _danhSachPhong, value);
         }
 
-        private ObservableCollection<LOAIPHONG> _danhsachTang;
+        private ObservableCollection<LOAIPHONG> _danhSachTang;
         public ObservableCollection<LOAIPHONG> DanhSachTang
         {
-            get => _danhsachTang;
-            set => SetProperty(ref _danhsachTang, value);
+            get => _danhSachTang;
+            set => SetProperty(ref _danhSachTang, value);
         }
 
         private string _maPhong;
         public string MaPhong { get => _maPhong; set => SetProperty(ref _maPhong, value); }
+
         private string _tenPhong;
         public string TenPhong { get => _tenPhong; set => SetProperty(ref _tenPhong, value); }
+
         private string _giaPhong;
         public string GiaPhong { get => _giaPhong; set => SetProperty(ref _giaPhong, value); }
+
         private string _sucChua;
         public string SucChua { get => _sucChua; set => SetProperty(ref _sucChua, value); }
 
         private bool _isQuat = true;
-        public bool IsQuat { get => _isQuat; set =>  SetProperty(ref _isQuat, value);}
+        public bool IsQuat { get => _isQuat; set => SetProperty(ref _isQuat, value); }
 
         private bool _isMayLanh;
         public bool IsMayLanh { get => _isMayLanh; set => SetProperty(ref _isMayLanh, value); }
@@ -62,14 +62,14 @@ namespace DoQuangHuy_2001215807_KT2.ViewModels
         public ICommand AddCommand { get; }
         public ICommand EditCommand { get; }
         public ICommand SaveCommand { get; }
-        public ICommand CLearCommand { get; }
+        public ICommand ClearCommand { get; }
 
         public PhongViewModel()
         {
             AddCommand = new RelayCommand(_ => ExecuteAdd());
             EditCommand = new RelayCommand(_ => ExecuteEdit(), _ => SelectedPhong != null);
             SaveCommand = new RelayCommand(_ => ExecuteSave());
-            CLearCommand = new RelayCommand(_ => ExecuteClear());
+            ClearCommand = new RelayCommand(_ => ExecuteClear());
 
             LoadData();
         }
@@ -86,9 +86,11 @@ namespace DoQuangHuy_2001215807_KT2.ViewModels
         private void ReloadPhong(KaraokeQLEntities db = null)
         {
             bool ownContext = db == null;
-            if(ownContext) db = new KaraokeQLEntities();
+            if (ownContext) db = new KaraokeQLEntities();
 
-            DanhSachPhong = new ObservableCollection<PHONG>(db.PHONGs.Include("LOAIPHONG").ToList());
+            DanhSachPhong = new ObservableCollection<PHONG>(
+                db.PHONGs.Include("LOAIPHONG").ToList()
+            );
 
             if (ownContext) db.Dispose();
         }
@@ -110,24 +112,27 @@ namespace DoQuangHuy_2001215807_KT2.ViewModels
 
             using (var db = new KaraokeQLEntities())
             {
-                if(db.PHONGs.Any(p => p.MaPhong == MaPhong))
+                if (db.PHONGs.Any(p => p.MaPhong == MaPhong))
                 {
-                    MessageBox.Show("Mã phòng đã tồn tại!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("Mã phòng đã tồn tại!", "Lỗi",
+                        MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
                 db.PHONGs.Add(BuildPhong());
                 db.SaveChanges();
             }
+
             ReloadPhong();
             ExecuteClear();
-            MessageBox.Show("Thêm phòng thành công!", "Thông báo",MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show("Thêm phòng thành công!", "Thông báo",
+                MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void ExecuteEdit()
         {
-            if(SelectedPhong == null)
+            if (SelectedPhong == null)
             {
-                MessageBox.Show("Vui lòng chọn một bộ phòng trên danh sách!", "Thông báo");
+                MessageBox.Show("Vui lòng chọn một phòng trên danh sách!", "Thông báo");
                 return;
             }
             MessageBox.Show("Hãy chỉnh sửa thông tin rồi nhấn Lưu.", "Hướng dẫn");
@@ -136,10 +141,11 @@ namespace DoQuangHuy_2001215807_KT2.ViewModels
         private void ExecuteSave()
         {
             if (!Validate()) return;
+
             using (var db = new KaraokeQLEntities())
             {
                 var phong = db.PHONGs.Find(MaPhong);
-                if(phong == null)
+                if (phong == null)
                 {
                     MessageBox.Show("Không tìm thấy phòng cần sửa!", "Lỗi");
                     return;
@@ -153,9 +159,11 @@ namespace DoQuangHuy_2001215807_KT2.ViewModels
 
                 db.SaveChanges();
             }
+
             ReloadPhong();
             ExecuteClear();
-            MessageBox.Show("Lưu thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show("Lưu thành công!", "Thông báo",
+                MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void ExecuteClear()
@@ -170,7 +178,6 @@ namespace DoQuangHuy_2001215807_KT2.ViewModels
             SelectedPhong = null;
         }
 
-
         private PHONG BuildPhong() => new PHONG
         {
             MaPhong = MaPhong,
@@ -184,9 +191,9 @@ namespace DoQuangHuy_2001215807_KT2.ViewModels
         private bool Validate()
         {
             if (string.IsNullOrWhiteSpace(MaPhong))
-            { MessageBox.Show("Vui lòng nhập Mã Phòng!"); return false; }
+            { MessageBox.Show("Vui lòng nhập Mã phòng!"); return false; }
             if (string.IsNullOrWhiteSpace(TenPhong))
-            { MessageBox.Show("Vui lòng nhập Tên Phòng!"); return false; }
+            { MessageBox.Show("Vui lòng nhập Tên phòng!"); return false; }
             if (!decimal.TryParse(GiaPhong, out _) || decimal.Parse(GiaPhong) <= 0)
             { MessageBox.Show("Giá phòng không hợp lệ!"); return false; }
             if (!int.TryParse(SucChua, out _) || int.Parse(SucChua) <= 0)
@@ -195,6 +202,5 @@ namespace DoQuangHuy_2001215807_KT2.ViewModels
             { MessageBox.Show("Vui lòng chọn tầng!"); return false; }
             return true;
         }
-
     }
 }
